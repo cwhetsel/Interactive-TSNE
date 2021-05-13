@@ -14,7 +14,6 @@ from PIL import Image
 import pickle
 from tqdm import tqdm
 import random
-import SIMCLR
 import time
 from sklearn.manifold import TSNE
 from sklearn.decomposition import PCA
@@ -33,6 +32,9 @@ from io import BytesIO
 import traceback, functools
 import pandas as pd 
 import umap.umap_ as umap
+
+#Internal import
+from models import SIMCLR
 
 class PrepareData:
     '''
