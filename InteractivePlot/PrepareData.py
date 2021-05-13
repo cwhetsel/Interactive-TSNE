@@ -14,6 +14,7 @@ from PIL import Image
 import pickle
 from tqdm import tqdm
 import random
+import SIMCLR
 import time
 from sklearn.manifold import TSNE
 from sklearn.decomposition import PCA
@@ -31,7 +32,7 @@ from PIL import Image
 from io import BytesIO
 import traceback, functools
 import pandas as pd 
-import umap
+import umap.umap_ as umap
 
 class PrepareData:
     '''
@@ -62,10 +63,10 @@ class PrepareData:
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
         if device == 'cuda':
             print('Using CUDA')
-            model = torch.load(MODEL_PATH)
+            model = SIMCLR.SIMCLR.load_from_checkpoint(MODEL_PATH)
         else: 
             print('Using CPU')
-            model = torch.load(MODEL_PATH, map_location = torch.cpu())
+            model = torch.load(MODEL_PATH, map_location = torch.device('cpu'))
         t = transforms.Compose(
         [transforms.Resize((224, 224)),
             transforms.ToTensor(),
