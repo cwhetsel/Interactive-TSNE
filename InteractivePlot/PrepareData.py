@@ -45,7 +45,7 @@ class PrepareData:
         self.model = model
         self.data_path = DATA_PATH
         self.embeddings = self.get_matrix(MODEL_PATH = model, DATA_PATH = DATA_PATH, output_size = output_size)
-        self.ims = self.get_images(DATA_PATH)
+        #self.ims = self.get_images(DATA_PATH)
         self.tsne_obj, self.spd, self.cl, self.objects = self.variable_gen(self.embeddings, num_clusters, self.ims, method, perplexity, n_jobs, n_neighbors)
 
     def get_matrix(self, MODEL_PATH, DATA_PATH, output_size):
@@ -75,6 +75,7 @@ class PrepareData:
         transforms.Normalize((0.5,), (0.5,), (0.5,))])
 
         dataset = torchvision.datasets.ImageFolder(DATA_PATH, transform = t)
+        self.ims = [im[0] for im in dataset.imgs]
         model.eval()
         if device == 'cuda':
             model.cuda()
@@ -83,7 +84,7 @@ class PrepareData:
                 data_matrix = torch.empty(size = (0, output_size)).cuda()
             else: 
                 data_matrix = torch.empty(size = (0, output_size))
-            bs = 64
+            bs = 1
             if len(dataset) < bs:
                 bs = 1
             loader = torch.utils.data.DataLoader(dataset, batch_size = bs, shuffle = False)
@@ -108,10 +109,10 @@ class PrepareData:
             (list) : Order of images in a folder
         '''
 
-        ims = []
-        for folder in os.listdir(DATA_PATH):
-            for im in os.listdir(f'{DATA_PATH}/{folder}'):
-                ims.append(f'{DATA_PATH}/{folder}/{im}')
+        import glob 
+        print(DATA_PATH + '/**/*.png')
+        ims = glob.glob(DATA_PATH + '/**/*.png', recursive=True)
+        print(len(ims))
         return ims
     
     def fit_tsne(self, feature_list, perplexity= 30, n_jobs= 4):

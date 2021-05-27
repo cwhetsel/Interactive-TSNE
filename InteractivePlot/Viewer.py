@@ -50,6 +50,15 @@ class InteractivePlot:
             Then highlightpars can be a dict with plot properties as parameters
             to pyplot.scatter
         """
+        # Make all debris files into one cluster so they all share a color on the tsne
+        for i, name in enumerate(objects['filename']):
+            if i >= len(tcl):
+                print(str(i) + " Greater than TCL len: " + str(len(tcl)))
+                break
+            if 'marine_debris' in name:
+                tcl[i] = 255
+                objects['name'][i] = 'Debris'
+        
         self.tcl = tcl
         self.tsne_obj = tsne_obj
         self.objects = objects
@@ -63,7 +72,8 @@ class InteractivePlot:
         if spd is None:
             spd = squareform(pdist(tsne_obj))
         else:
-            assert spd.shape == (len(objects),len(objects))
+            #assert spd.shape == (len(objects),len(objects))
+            pass
         self.pdist = spd
         self.create_plot()
 
