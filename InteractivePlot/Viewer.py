@@ -56,7 +56,7 @@ class InteractivePlot:
                 print(str(i) + " Greater than TCL len: " + str(len(tcl)))
                 break
             if 'marine_debris' in name:
-                tcl[i] = 255
+                tcl[i] = 32
                 objects['name'][i] = 'Debris'
         
         self.tcl = tcl
